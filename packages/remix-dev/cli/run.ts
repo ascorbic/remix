@@ -251,6 +251,60 @@ export async function run(argv: string[] = process.argv.slice(2)) {
           install: boolean;
         }>([
           {
+            name: "appType",
+            type: "list",
+            message: "What type of app do you want to create?",
+            when() {
+              return flags.template === undefined;
+            },
+            choices: [
+              {
+                name: "A pre-configured stack ready for production",
+                value: "stack",
+              },
+              {
+                name: "Just the basics",
+                value: "template",
+              },
+            ],
+          },
+          {
+            name: "appTemplate",
+            type: "list",
+            when(answers) {
+              return answers.appType === "stack";
+            },
+            message: "Which Stack do you want? ",
+            loop: false,
+            suffix: "(Learn more about these stacks: https://remix.run/stacks)",
+            choices: [
+              {
+                name: "Blues",
+                value: "remix-run/blues-stack",
+              },
+              {
+                name: "Indie",
+                value: "remix-run/indie-stack",
+              },
+              {
+                name: "Grunge",
+                value: "remix-run/grunge-stack",
+              },
+            ],
+          },
+          {
+            name: "appTemplate",
+            type: "list",
+            when(answers) {
+              return answers.appType === "template";
+            },
+            message:
+              "Where do you want to deploy? Choose Remix if you're unsure; " +
+              "it's easy to change deployment targets.",
+            loop: false,
+            choices: templateChoices,
+          },
+          {
             name: "install",
             type: "confirm",
             message: `Do you want me to run \`${pm} install\`?`,
@@ -284,7 +338,7 @@ export async function run(argv: string[] = process.argv.slice(2)) {
       let installDeps = flags.install !== false && answers.install !== false;
 
       await commands.create({
-        appTemplate: "https://github.com/netlify/remix-edge-template",
+        appTemplate: flags.template || answers.appTemplate,
         projectDir,
         remixVersion: flags.remixVersion,
         installDeps,
