@@ -353,7 +353,10 @@ async function createBrowserBuild(
     NodeModulesPolyfillPlugin(),
   ];
 
-  if (["deno", "netlify-edge"].includes(config.serverBuildTarget)) {
+  if (
+    config.serverBuildTarget &&
+    ["deno", "netlify-edge"].includes(config.serverBuildTarget)
+  ) {
     // @ts-expect-error
     let { cache } = await import("esbuild-plugin-cache");
     plugins.unshift(
