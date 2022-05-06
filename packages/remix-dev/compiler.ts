@@ -353,9 +353,7 @@ async function createBrowserBuild(
     NodeModulesPolyfillPlugin(),
   ];
 
-  if (
-    ["deno", "netlify-edge"].includes(config.serverBuildTarget)
-  ) {
+  if (["deno", "netlify-edge"].includes(config.serverBuildTarget)) {
     // @ts-expect-error
     let { cache } = await import("esbuild-plugin-cache");
     plugins.unshift(
@@ -420,7 +418,9 @@ function createServerBuild(
   let isCloudflareRuntime = ["cloudflare-pages", "cloudflare-workers"].includes(
     config.serverBuildTarget ?? ""
   );
-  let isDenoRuntime = config.serverBuildTarget ? ["deno", "netlify-edge"].includes(config.serverBuildTarget) : false
+  let isDenoRuntime = config.serverBuildTarget
+    ? ["deno", "netlify-edge"].includes(config.serverBuildTarget)
+    : false;
 
   let conditions = undefined;
   let mainFields =
