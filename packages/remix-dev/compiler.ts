@@ -354,8 +354,7 @@ async function createBrowserBuild(
   ];
 
   if (
-    config.serverBuildTarget === "deno" ||
-    config.serverBuildTarget === "netlify-edge"
+    ["deno", "netlify-edge"].includes(config.serverBuildTarget)
   ) {
     // @ts-expect-error
     let { cache } = await import("esbuild-plugin-cache");
